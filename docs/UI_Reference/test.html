@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Diagnostic — LearnCurve</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    :root{
+      --forest-deep:#142722;
+      --forest:#1E3A34;
+      --sage:#6B8F7F;
+      --sage-tint:#DFE9E2;
+      --sage-tint-2:#EEF3EF;
+      --paper:#FAFAF8;
+      --amber:#E3A23D;
+      --rust:#BD5B3F;
+      --ink:#16231F;
+      --ink-soft:#4B5B54;
+      --white:#FFFFFF;
+      --line:#D8E2DB;
+      --radius-s:6px;
+      --radius-m:10px;
+      --radius-l:18px;
+      --shadow:0 1px 2px rgba(20,39,34,.06), 0 8px 24px rgba(20,39,34,.06);
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;}
+    body{
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+      color:var(--ink);
+      background:var(--paper);
+      -webkit-font-smoothing:antialiased;
+      line-height:1.5;
+    }
+    h1,h2,h3,h4{
+      font-family:'Fraunces',Georgia,serif;
+      font-weight:560;
+      color:var(--forest-deep);
+      margin:0;
+      letter-spacing:-0.01em;
+    }
+    p{margin:0;}
+    a{color:inherit;text-decoration:none;}
+    ul{list-style:none;margin:0;padding:0;}
+    button{font-family:inherit;cursor:pointer;}
+    img,svg{display:block;max-width:100%;}
+    ::selection{background:var(--amber);color:var(--forest-deep);}
+
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:13px 24px;border-radius:999px;border:1px solid transparent;
+      font-size:15px;font-weight:600;transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .btn:active{transform:scale(.98);}
+    .btn-primary{background:var(--forest-deep);color:var(--white);}
+    .btn-primary:hover{box-shadow:0 6px 18px rgba(20,39,34,.25);}
+    .btn-ghost{background:transparent;color:var(--forest-deep);border-color:var(--line);}
+    .btn-ghost:hover{border-color:var(--forest);}
+    .btn-amber{background:var(--amber);color:var(--forest-deep);}
+    .btn-amber:hover{box-shadow:0 6px 18px rgba(227,162,61,.35);}
+    .btn-sm{padding:9px 16px;font-size:13.5px;}
+    .btn-block{width:100%;}
+
+    .tag{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:4px 11px;border-radius:999px;font-size:12.5px;font-weight:600;
+    }
+    .tag-strong{background:#E2F0E7;color:#2B6B4A;}
+    .tag-watch{background:#FBEFDD;color:#95661F;}
+    .tag-weak{background:#F6E4DE;color:#963F26;}
+
+    .card{
+      background:var(--white);border-radius:var(--radius-l);
+      border:1px solid var(--line);box-shadow:var(--shadow);
+    }
+
+    .container{max-width:1180px;margin:0 auto;padding:0 32px;}
+
+    ::-webkit-scrollbar{width:10px;height:10px;}
+    ::-webkit-scrollbar-thumb{background:var(--sage-tint);border-radius:8px;}
+
+    :focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+
+    @media (prefers-reduced-motion: reduce){
+      *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+    }
+
+</style>
+</head>
+<body>
+<style>
+  .test-shell{min-height:100vh;display:flex;flex-direction:column;background:var(--paper);}
+  .test-top{display:flex;align-items:center;justify-content:space-between;padding:18px 32px;border-bottom:1px solid var(--line);background:var(--white);}
+  .test-brand{display:flex;align-items:center;gap:9px;font-family:'Fraunces',serif;font-weight:600;font-size:16px;}
+  .test-meta{font-size:13.5px;color:var(--ink-soft);}
+  .timer{display:flex;align-items:center;gap:8px;font-weight:700;font-size:15px;color:var(--forest-deep);background:var(--sage-tint-2);padding:8px 16px;border-radius:999px;}
+  .timer svg{width:16px;height:16px;}
+
+  .progress-track{height:4px;background:var(--sage-tint-2);}
+  .progress-fill{height:4px;background:var(--amber);width:32%;}
+
+  .test-body{flex:1;display:grid;grid-template-columns:1fr 300px;gap:0;}
+  .question-area{padding:48px 60px;max-width:760px;}
+  .q-label{font-size:13px;font-weight:600;color:var(--sage);margin-bottom:14px;}
+  .q-text{font-size:22px;font-family:'Fraunces',serif;font-weight:560;line-height:1.5;margin-bottom:36px;}
+
+  .options{display:flex;flex-direction:column;gap:12px;}
+  .option{display:flex;align-items:center;gap:14px;padding:16px 18px;border:1.5px solid var(--line);border-radius:var(--radius-m);font-size:15px;background:var(--white);}
+  .option:hover{border-color:var(--sage);}
+  .option.selected{border-color:var(--forest);background:var(--sage-tint-2);}
+  .option-letter{width:28px;height:28px;border-radius:50%;border:1.5px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:var(--ink-soft);flex:none;}
+  .option.selected .option-letter{background:var(--forest-deep);border-color:var(--forest-deep);color:var(--white);}
+
+  .q-footer{display:flex;justify-content:space-between;align-items:center;margin-top:40px;}
+  .mark-review{display:flex;align-items:center;gap:8px;font-size:13.5px;color:var(--ink-soft);font-weight:600;}
+  .q-nav-btns{display:flex;gap:10px;}
+
+  .palette{border-left:1px solid var(--line);background:var(--white);padding:30px 26px;}
+  .palette h4{font-size:14px;margin-bottom:6px;}
+  .palette-sub{font-size:12.5px;color:var(--ink-soft);margin-bottom:18px;}
+  .palette-grid{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:22px;}
+  .p-cell{aspect-ratio:1;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:12.5px;font-weight:700;border:1px solid var(--line);color:var(--ink-soft);}
+  .p-cell.done{background:#E2F0E7;border-color:#BFE0CB;color:#2B6B4A;}
+  .p-cell.current{background:var(--forest-deep);border-color:var(--forest-deep);color:var(--white);}
+  .p-cell.marked{background:#FBEFDD;border-color:#F0D9AC;color:#95661F;}
+
+  .palette-legend{display:flex;flex-direction:column;gap:8px;font-size:12px;color:var(--ink-soft);margin-bottom:26px;}
+  .palette-legend span{display:flex;align-items:center;gap:8px;}
+  .dot{width:10px;height:10px;border-radius:3px;display:inline-block;}
+
+  @media(max-width:860px){
+    .test-body{grid-template-columns:1fr;}
+    .palette{border-left:none;border-top:1px solid var(--line);}
+    .question-area{padding:32px 24px;}
+  }
+</style>
+
+<div class="test-shell">
+  <div class="test-top">
+    <div class="test-brand">
+      <svg width="22" height="22" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="9" fill="#1E3A34"/><path d="M8 21 L13 14 L18 18 L24 9" stroke="#E3A23D" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      Weekly Diagnostic — Mathematics
+    </div>
+    <div class="test-meta">Question 4 of 12</div>
+    <div class="timer">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l3 2"/><path d="M9 2h6"/></svg>
+      08:42
+    </div>
+  </div>
+  <div class="progress-track"><div class="progress-fill"></div></div>
+
+  <div class="test-body">
+    <div class="question-area">
+      <div class="q-label">FRACTIONS · MEDIUM DIFFICULTY</div>
+      <h2 class="q-text">Riya had 3⅔ cups of flour. She used 1⅚ cups for a cake. How much flour is left?</h2>
+
+      <div class="options">
+        <div class="option"><span class="option-letter">A</span> 1⅔ cups</div>
+        <div class="option selected"><span class="option-letter">B</span> 1⅚ cups</div>
+        <div class="option"><span class="option-letter">C</span> 2⅙ cups</div>
+        <div class="option"><span class="option-letter">D</span> 2⅚ cups</div>
+      </div>
+
+      <div class="q-footer">
+        <div class="mark-review">
+          <input type="checkbox" id="mark"/><label for="mark" style="margin:0;">Mark for review</label>
+        </div>
+        <div class="q-nav-btns">
+          <button class="btn btn-ghost">Previous</button>
+          <button class="btn btn-primary">Save & next</button>
+        </div>
+      </div>
+    </div>
+
+    <aside class="palette">
+      <h4>Question palette</h4>
+      <p class="palette-sub">12 questions · Mathematics</p>
+      <div class="palette-grid">
+        <div class="p-cell done">1</div><div class="p-cell done">2</div><div class="p-cell marked">3</div>
+        <div class="p-cell current">4</div><div class="p-cell">5</div><div class="p-cell">6</div>
+        <div class="p-cell">7</div><div class="p-cell">8</div><div class="p-cell">9</div>
+        <div class="p-cell">10</div><div class="p-cell">11</div><div class="p-cell">12</div>
+      </div>
+      <div class="palette-legend">
+        <span><span class="dot" style="background:#E2F0E7;border:1px solid #BFE0CB;"></span>Answered</span>
+        <span><span class="dot" style="background:#FBEFDD;border:1px solid #F0D9AC;"></span>Marked for review</span>
+        <span><span class="dot" style="background:var(--forest-deep);"></span>Current question</span>
+        <span><span class="dot" style="background:var(--white);border:1px solid var(--line);"></span>Not visited</span>
+      </div>
+      <button class="btn btn-amber btn-block">Submit test</button>
+    </aside>
+  </div>
+</div>
+
+</body>
+</html>

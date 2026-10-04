@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>School Admin — LearnCurve</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    :root{
+      --forest-deep:#142722;
+      --forest:#1E3A34;
+      --sage:#6B8F7F;
+      --sage-tint:#DFE9E2;
+      --sage-tint-2:#EEF3EF;
+      --paper:#FAFAF8;
+      --amber:#E3A23D;
+      --rust:#BD5B3F;
+      --ink:#16231F;
+      --ink-soft:#4B5B54;
+      --white:#FFFFFF;
+      --line:#D8E2DB;
+      --radius-s:6px;
+      --radius-m:10px;
+      --radius-l:18px;
+      --shadow:0 1px 2px rgba(20,39,34,.06), 0 8px 24px rgba(20,39,34,.06);
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;}
+    body{
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+      color:var(--ink);
+      background:var(--paper);
+      -webkit-font-smoothing:antialiased;
+      line-height:1.5;
+    }
+    h1,h2,h3,h4{
+      font-family:'Fraunces',Georgia,serif;
+      font-weight:560;
+      color:var(--forest-deep);
+      margin:0;
+      letter-spacing:-0.01em;
+    }
+    p{margin:0;}
+    a{color:inherit;text-decoration:none;}
+    ul{list-style:none;margin:0;padding:0;}
+    button{font-family:inherit;cursor:pointer;}
+    img,svg{display:block;max-width:100%;}
+    ::selection{background:var(--amber);color:var(--forest-deep);}
+
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:13px 24px;border-radius:999px;border:1px solid transparent;
+      font-size:15px;font-weight:600;transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .btn:active{transform:scale(.98);}
+    .btn-primary{background:var(--forest-deep);color:var(--white);}
+    .btn-primary:hover{box-shadow:0 6px 18px rgba(20,39,34,.25);}
+    .btn-ghost{background:transparent;color:var(--forest-deep);border-color:var(--line);}
+    .btn-ghost:hover{border-color:var(--forest);}
+    .btn-amber{background:var(--amber);color:var(--forest-deep);}
+    .btn-amber:hover{box-shadow:0 6px 18px rgba(227,162,61,.35);}
+    .btn-sm{padding:9px 16px;font-size:13.5px;}
+    .btn-block{width:100%;}
+
+    .tag{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:4px 11px;border-radius:999px;font-size:12.5px;font-weight:600;
+    }
+    .tag-strong{background:#E2F0E7;color:#2B6B4A;}
+    .tag-watch{background:#FBEFDD;color:#95661F;}
+    .tag-weak{background:#F6E4DE;color:#963F26;}
+
+    .card{
+      background:var(--white);border-radius:var(--radius-l);
+      border:1px solid var(--line);box-shadow:var(--shadow);
+    }
+
+    .container{max-width:1180px;margin:0 auto;padding:0 32px;}
+
+    ::-webkit-scrollbar{width:10px;height:10px;}
+    ::-webkit-scrollbar-thumb{background:var(--sage-tint);border-radius:8px;}
+
+    :focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+
+    @media (prefers-reduced-motion: reduce){
+      *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+    }
+
+</style>
+</head>
+<body>
+<style>
+  .app{display:grid;grid-template-columns:248px 1fr;min-height:100vh;}
+  .sidebar{background:var(--forest-deep);color:#CFE2D7;padding:26px 20px;display:flex;flex-direction:column;}
+  .sidebar .brand{color:var(--white);font-family:'Fraunces',serif;font-size:18px;font-weight:600;display:flex;align-items:center;gap:9px;margin-bottom:6px;padding:0 6px;}
+  .org-tag{font-size:12px;color:#8FB3A0;padding:0 6px;margin-bottom:32px;}
+  .side-nav{display:flex;flex-direction:column;gap:2px;flex:1;}
+  .side-link{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:14px;font-weight:500;color:#B9D2C4;}
+  .side-link svg{width:18px;height:18px;flex:none;}
+  .side-link.active{background:rgba(255,255,255,.08);color:var(--white);}
+  .side-foot{padding-top:20px;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:10px;}
+  .avatar{width:34px;height:34px;border-radius:50%;background:var(--amber);color:var(--forest-deep);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:none;}
+  .side-foot-text{font-size:13px;line-height:1.3;}
+  .side-foot-text b{color:var(--white);display:block;font-size:13.5px;}
+
+  .main{padding:36px 40px 60px;}
+  .top-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:30px;}
+  .greeting{font-size:26px;}
+  .greeting-sub{color:var(--ink-soft);font-size:14.5px;margin-top:6px;}
+  .class-filter{display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--line);padding:10px 16px;border-radius:10px;font-size:13.5px;font-weight:600;}
+
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:26px;}
+  .stat-card{padding:20px 22px;}
+  .stat-label{font-size:12.5px;color:var(--ink-soft);font-weight:600;margin-bottom:10px;}
+  .stat-value{font-family:'Fraunces',serif;font-size:26px;color:var(--forest-deep);}
+  .stat-delta{font-size:12.5px;font-weight:600;margin-top:6px;}
+  .up{color:#2B6B4A;}
+  .down{color:#963F26;}
+
+  .grid-2{display:grid;grid-template-columns:1.5fr 1fr;gap:20px;align-items:start;margin-bottom:26px;}
+
+  .curve-panel{padding:26px 28px 20px;}
+  .curve-panel-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:4px;}
+  .curve-panel-top h3{font-size:17px;}
+  .curve-caption{font-size:13px;color:var(--ink-soft);margin-bottom:8px;}
+  .legend-row{display:flex;gap:16px;font-size:12px;color:var(--ink-soft);margin-top:6px;}
+  .legend-row span{display:flex;align-items:center;gap:6px;}
+  .legend-row .dot{width:8px;height:8px;border-radius:50%;}
+
+  .bank-panel{padding:24px 26px;}
+  .bank-panel h3{font-size:17px;margin-bottom:16px;}
+  .bank-row{margin-bottom:14px;}
+  .bank-row-top{display:flex;justify-content:space-between;font-size:13px;margin-bottom:6px;}
+  .bank-row-top b{font-weight:600;color:var(--ink);}
+  .bank-bar-track{height:7px;background:var(--sage-tint-2);border-radius:6px;overflow:hidden;}
+  .bank-bar-fill{height:100%;background:var(--forest);border-radius:6px;}
+
+  .table-section{padding:24px 26px;}
+  .table-section-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;}
+  .table-section h3{font-size:17px;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  th{text-align:left;font-size:12px;color:var(--ink-soft);font-weight:600;padding:0 10px 12px;border-bottom:1px solid var(--line);}
+  td{padding:14px 10px;border-bottom:1px solid var(--sage-tint-2);}
+  tr:last-child td{border-bottom:none;}
+  .student-cell{display:flex;align-items:center;gap:10px;}
+  .mini-avatar{width:28px;height:28px;border-radius:50%;background:var(--sage-tint);color:var(--forest);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;flex:none;}
+  .trend{font-weight:700;}
+
+  @media(max-width:1080px){
+    .stat-row{grid-template-columns:repeat(2,1fr);}
+    .grid-2{grid-template-columns:1fr;}
+  }
+  @media(max-width:760px){
+    .app{grid-template-columns:1fr;}
+    .sidebar{display:none;}
+  }
+</style>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="9" fill="#E3A23D"/><path d="M8 21 L13 14 L18 18 L24 9" stroke="#142722" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      LearnCurve
+    </div>
+    <div class="org-tag">Greenwood Public School</div>
+    <nav class="side-nav">
+      <a class="side-link active" href="admin.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 13h6V4H4v9zm0 7h6v-5H4v5zm10 0h6V11h-6v9zm0-16v5h6V4h-6z"/></svg>Overview</a>
+      <a class="side-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="9" cy="8" r="4"/><path d="M2 21c0-4 3.5-6 7-6s7 2 7 6"/><circle cx="18" cy="9" r="3"/><path d="M15 21c0-2.8 1.5-4.5 3.5-5"/></svg>Students</a>
+      <a class="side-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 016.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 014 19.5v-15A2.5 2.5 0 016.5 2z"/></svg>Question bank</a>
+      <a class="side-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>Reports</a>
+      <a class="side-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 00.34 1.87l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.7 1.7 0 00-1.87-.34 1.7 1.7 0 00-1 1.55V21a2 2 0 01-4 0v-.09A1.7 1.7 0 008.5 19.4a1.7 1.7 0 00-1.87.34l-.06.06a2 2 0 11-2.83-2.83l.06-.06A1.7 1.7 0 004.6 15a1.7 1.7 0 00-1.55-1H3a2 2 0 010-4h.09A1.7 1.7 0 004.6 9a1.7 1.7 0 00-.34-1.87l-.06-.06a2 2 0 112.83-2.83l.06.06A1.7 1.7 0 008.5 4.6a1.7 1.7 0 001-1.55V3a2 2 0 014 0v.09a1.7 1.7 0 001 1.55 1.7 1.7 0 001.87-.34l.06-.06a2 2 0 112.83 2.83l-.06.06A1.7 1.7 0 0019.4 9a1.7 1.7 0 001.55 1H21a2 2 0 010 4h-.09a1.7 1.7 0 00-1.55 1z"/></svg>Settings</a>
+    </nav>
+    <div class="side-foot">
+      <div class="avatar">RM</div>
+      <div class="side-foot-text"><b>Rekha Menon</b>Class 7 coordinator</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top-row">
+      <div>
+        <h1 class="greeting">Class 7 overview</h1>
+        <p class="greeting-sub">142 students · Mathematics · Term 2</p>
+      </div>
+      <div class="class-filter">Class 7 · All sections ▾</div>
+    </div>
+
+    <div class="stat-row">
+      <div class="card stat-card">
+        <div class="stat-label">Active students</div>
+        <div class="stat-value">138 / 142</div>
+        <div class="stat-delta up">97% weekly participation</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">Average mastery</div>
+        <div class="stat-value">68%</div>
+        <div class="stat-delta up">↑ 6% vs last month</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">Tests run this week</div>
+        <div class="stat-value">4</div>
+        <div class="stat-delta up">All sections on schedule</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">Students at risk</div>
+        <div class="stat-value">9</div>
+        <div class="stat-delta down">Below 45% mastery</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card curve-panel">
+        <div class="curve-panel-top"><h3>Class-wide learning curve</h3></div>
+        <p class="curve-caption">Mathematics mastery, last 10 weeks</p>
+        <svg viewBox="0 0 560 190" width="100%" height="200">
+          <line x1="0" y1="15" x2="560" y2="15" stroke="#EEF3EF"/>
+          <line x1="0" y1="70" x2="560" y2="70" stroke="#EEF3EF"/>
+          <line x1="0" y1="125" x2="560" y2="125" stroke="#EEF3EF"/>
+          <line x1="0" y1="170" x2="560" y2="170" stroke="#D8E2DB"/>
+          <path d="M0 150 C 60 148,100 152,150 145 C 210 138,250 142,300 130 C 360 118,400 122,450 108 C 490 98,520 100,560 90" fill="none" stroke="#C7D6CC" stroke-width="2"/>
+          <path d="M0 160 C 60 158,100 150,150 140 C 210 128,250 135,300 115 C 360 98,400 105,450 80 C 490 65,520 68,560 50" fill="none" stroke="#C7D6CC" stroke-width="2"/>
+          <path d="M0 155 C 60 150,100 148,150 138 C 210 128,250 130,300 118 C 360 105,400 108,450 90 C 490 78,520 80,560 65" fill="none" stroke="#1E3A34" stroke-width="3.5" stroke-linecap="round"/>
+          <circle cx="560" cy="65" r="5" fill="#1E3A34"/>
+          <text x="0" y="186" font-size="11" fill="#4B5B54" font-family="Inter">Wk 1</text>
+          <text x="510" y="186" font-size="11" fill="#4B5B54" font-family="Inter">Wk 10</text>
+        </svg>
+        <div class="legend-row">
+          <span><span class="dot" style="background:#1E3A34;"></span>Class average</span>
+          <span><span class="dot" style="background:#C7D6CC;"></span>Individual sections</span>
+        </div>
+      </div>
+
+      <div class="card bank-panel">
+        <h3>Question bank coverage</h3>
+        <div class="bank-row">
+          <div class="bank-row-top"><span>Algebra</span><b>210 questions</b></div>
+          <div class="bank-bar-track"><div class="bank-bar-fill" style="width:88%;"></div></div>
+        </div>
+        <div class="bank-row">
+          <div class="bank-row-top"><span>Geometry</span><b>140 questions</b></div>
+          <div class="bank-bar-track"><div class="bank-bar-fill" style="width:60%;"></div></div>
+        </div>
+        <div class="bank-row">
+          <div class="bank-row-top"><span>Fractions</span><b>95 questions</b></div>
+          <div class="bank-bar-track"><div class="bank-bar-fill" style="width:41%;"></div></div>
+        </div>
+        <div class="bank-row" style="margin-bottom:0;">
+          <div class="bank-row-top"><span>Ratio &amp; proportion</span><b>168 questions</b></div>
+          <div class="bank-bar-track"><div class="bank-bar-fill" style="width:72%;"></div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card table-section">
+      <div class="table-section-top">
+        <h3>Students to check in on</h3>
+        <button class="btn btn-ghost btn-sm">View all students</button>
+      </div>
+      <table>
+        <thead><tr><th>Student</th><th>Section</th><th>Weakest topic</th><th>Mastery</th><th>Trend</th><th>Last active</th></tr></thead>
+        <tbody>
+          <tr>
+            <td><div class="student-cell"><div class="mini-avatar">KV</div>Kabir Verma</div></td>
+            <td>7-B</td><td>Fractions</td><td>32%</td>
+            <td class="trend down">↓ 4%</td><td>2 days ago</td>
+          </tr>
+          <tr>
+            <td><div class="student-cell"><div class="mini-avatar">SN</div>Sana Naidu</div></td>
+            <td>7-A</td><td>Geometry</td><td>38%</td>
+            <td class="trend down">↓ 2%</td><td>Yesterday</td>
+          </tr>
+          <tr>
+            <td><div class="student-cell"><div class="mini-avatar">MR</div>Mohit Rao</div></td>
+            <td>7-C</td><td>Fractions</td><td>41%</td>
+            <td class="trend up">↑ 3%</td><td>Today</td>
+          </tr>
+          <tr>
+            <td><div class="student-cell"><div class="mini-avatar">AI</div>Ayesha Iyer</div></td>
+            <td>7-B</td><td>Ratio & proportion</td><td>43%</td>
+            <td class="trend up">↑ 6%</td><td>Today</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>

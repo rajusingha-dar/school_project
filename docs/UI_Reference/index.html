@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LearnCurve — See every child's learning curve</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    :root{
+      --forest-deep:#142722;
+      --forest:#1E3A34;
+      --sage:#6B8F7F;
+      --sage-tint:#DFE9E2;
+      --sage-tint-2:#EEF3EF;
+      --paper:#FAFAF8;
+      --amber:#E3A23D;
+      --rust:#BD5B3F;
+      --ink:#16231F;
+      --ink-soft:#4B5B54;
+      --white:#FFFFFF;
+      --line:#D8E2DB;
+      --radius-s:6px;
+      --radius-m:10px;
+      --radius-l:18px;
+      --shadow:0 1px 2px rgba(20,39,34,.06), 0 8px 24px rgba(20,39,34,.06);
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;}
+    body{
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+      color:var(--ink);
+      background:var(--paper);
+      -webkit-font-smoothing:antialiased;
+      line-height:1.5;
+    }
+    h1,h2,h3,h4{
+      font-family:'Fraunces',Georgia,serif;
+      font-weight:560;
+      color:var(--forest-deep);
+      margin:0;
+      letter-spacing:-0.01em;
+    }
+    p{margin:0;}
+    a{color:inherit;text-decoration:none;}
+    ul{list-style:none;margin:0;padding:0;}
+    button{font-family:inherit;cursor:pointer;}
+    img,svg{display:block;max-width:100%;}
+    ::selection{background:var(--amber);color:var(--forest-deep);}
+
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:13px 24px;border-radius:999px;border:1px solid transparent;
+      font-size:15px;font-weight:600;transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .btn:active{transform:scale(.98);}
+    .btn-primary{background:var(--forest-deep);color:var(--white);}
+    .btn-primary:hover{box-shadow:0 6px 18px rgba(20,39,34,.25);}
+    .btn-ghost{background:transparent;color:var(--forest-deep);border-color:var(--line);}
+    .btn-ghost:hover{border-color:var(--forest);}
+    .btn-amber{background:var(--amber);color:var(--forest-deep);}
+    .btn-amber:hover{box-shadow:0 6px 18px rgba(227,162,61,.35);}
+    .btn-sm{padding:9px 16px;font-size:13.5px;}
+    .btn-block{width:100%;}
+
+    .tag{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:4px 11px;border-radius:999px;font-size:12.5px;font-weight:600;
+    }
+    .tag-strong{background:#E2F0E7;color:#2B6B4A;}
+    .tag-watch{background:#FBEFDD;color:#95661F;}
+    .tag-weak{background:#F6E4DE;color:#963F26;}
+
+    .card{
+      background:var(--white);border-radius:var(--radius-l);
+      border:1px solid var(--line);box-shadow:var(--shadow);
+    }
+
+    .container{max-width:1180px;margin:0 auto;padding:0 32px;}
+
+    ::-webkit-scrollbar{width:10px;height:10px;}
+    ::-webkit-scrollbar-thumb{background:var(--sage-tint);border-radius:8px;}
+
+    :focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+
+    @media (prefers-reduced-motion: reduce){
+      *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+    }
+
+</style>
+</head>
+<body>
+<style>
+  .nav{display:flex;align-items:center;justify-content:space-between;padding:22px 0;}
+  .brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:600;font-size:19px;color:var(--forest-deep);}
+  .brand-mark{width:30px;height:30px;flex:none;}
+  .nav-links{display:flex;align-items:center;gap:34px;font-size:14.5px;font-weight:500;color:var(--ink-soft);}
+  .nav-cta{display:flex;align-items:center;gap:14px;}
+  .nav-links a:hover{color:var(--forest-deep);}
+
+  .hero{padding:64px 0 96px;position:relative;overflow:hidden;}
+  .hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:56px;align-items:center;}
+  .eyebrow{color:var(--sage);font-weight:600;font-size:14.5px;margin-bottom:18px;}
+  .hero h1{font-size:52px;line-height:1.08;max-width:11.5ch;}
+  .hero-sub{margin-top:22px;font-size:18px;color:var(--ink-soft);max-width:46ch;line-height:1.6;}
+  .hero-actions{margin-top:34px;display:flex;align-items:center;gap:22px;}
+  .hero-note{font-size:13.5px;color:var(--ink-soft);}
+
+  .hero-visual{position:relative;}
+  .curve-card{background:var(--forest-deep);border-radius:24px;padding:30px 28px 26px;color:var(--white);}
+  .curve-card-top{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+  .curve-card-name{font-family:'Fraunces',serif;font-size:19px;font-weight:600;}
+  .curve-card-tag{font-size:12.5px;color:#9FC2AE;}
+  .curve-svg-wrap{margin-top:18px;background:rgba(255,255,255,.04);border-radius:16px;padding:18px 18px 8px;}
+  .curve-legend{display:flex;gap:18px;margin-top:14px;font-size:12px;color:#B9D2C4;}
+  .legend-dot{width:8px;height:8px;border-radius:50%;display:inline-block;margin-right:6px;}
+  .curve-callout{position:absolute;top:-16px;right:-16px;background:var(--amber);color:var(--forest-deep);
+    padding:10px 16px;border-radius:14px;font-size:13px;font-weight:700;box-shadow:0 10px 24px rgba(227,162,61,.4);
+    transform:rotate(3deg);}
+
+  .curve-path{stroke-dasharray:600;stroke-dashoffset:600;animation:draw 1.6s ease forwards .3s;}
+  @keyframes draw{to{stroke-dashoffset:0;}}
+
+  section{padding:88px 0;}
+  .section-head{max-width:640px;margin-bottom:52px;}
+  .section-head .eyebrow{margin-bottom:14px;}
+  .section-head h2{font-size:34px;line-height:1.18;}
+
+  .problem-row{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+  .problem-card{padding:30px 26px;border-radius:var(--radius-l);background:var(--white);border:1px solid var(--line);}
+  .problem-icon{width:40px;height:40px;margin-bottom:20px;}
+  .problem-card h3{font-size:17.5px;margin-bottom:10px;}
+  .problem-card p{font-size:14.5px;color:var(--ink-soft);line-height:1.6;}
+
+  .how{background:var(--sage-tint-2);}
+  .how-list{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative;}
+  .how-item{padding:0 20px 0 0;position:relative;}
+  .how-num{font-family:'Fraunces',serif;font-size:15px;color:var(--sage);font-weight:600;margin-bottom:14px;}
+  .how-item h4{font-size:16.5px;margin-bottom:8px;}
+  .how-item p{font-size:13.5px;color:var(--ink-soft);line-height:1.55;}
+  .how-rule{position:absolute;top:9px;left:0;right:0;height:1px;background:var(--line);z-index:0;}
+
+  .audience{display:grid;grid-template-columns:1fr 1fr;gap:22px;}
+  .aud-card{padding:36px 34px;border-radius:var(--radius-l);}
+  .aud-parent{background:var(--forest-deep);color:var(--white);}
+  .aud-school{background:var(--white);border:1px solid var(--line);}
+  .aud-card .kicker{font-size:13px;font-weight:600;margin-bottom:16px;}
+  .aud-parent .kicker{color:#9FC2AE;}
+  .aud-school .kicker{color:var(--sage);}
+  .aud-card h3{font-size:24px;margin-bottom:14px;}
+  .aud-parent h3{color:var(--white);}
+  .aud-card p{font-size:14.5px;line-height:1.65;margin-bottom:22px;}
+  .aud-parent p{color:#CFE2D7;}
+  .aud-school p{color:var(--ink-soft);}
+
+  .cta-band{background:var(--forest-deep);border-radius:28px;padding:56px 60px;display:flex;align-items:center;justify-content:space-between;gap:40px;}
+  .cta-band h2{color:var(--white);font-size:30px;max-width:14ch;}
+  .cta-form{display:flex;gap:10px;}
+  .cta-form input{padding:13px 18px;border-radius:999px;border:1px solid rgba(255,255,255,.25);
+    background:rgba(255,255,255,.08);color:var(--white);font-size:14.5px;width:240px;}
+  .cta-form input::placeholder{color:#A9C4B7;}
+
+  footer{border-top:1px solid var(--line);padding:34px 0;display:flex;justify-content:space-between;align-items:center;font-size:13px;color:var(--ink-soft);}
+
+  @media(max-width:880px){
+    .hero-grid{grid-template-columns:1fr;}
+    .problem-row,.audience{grid-template-columns:1fr;}
+    .how-list{grid-template-columns:1fr;gap:26px;}
+    .how-rule{display:none;}
+    .hero h1{font-size:38px;}
+    .cta-band{flex-direction:column;align-items:flex-start;}
+    .nav-links{display:none;}
+  }
+</style>
+
+<header class="container">
+  <nav class="nav">
+    <div class="brand">
+      <svg class="brand-mark" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="9" fill="#1E3A34"/><path d="M8 21 L13 14 L18 18 L24 9" stroke="#E3A23D" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      LearnCurve
+    </div>
+    <div class="nav-links">
+      <a href="#how">How it works</a>
+      <a href="#schools">For schools</a>
+      <a href="#pricing">Pricing</a>
+    </div>
+    <div class="nav-cta">
+      <a href="login.html" class="btn btn-ghost btn-sm">Log in</a>
+      <a href="login.html" class="btn btn-primary btn-sm">Get started</a>
+    </div>
+  </nav>
+</header>
+
+<section class="hero container" style="padding-top:24px;">
+  <div class="hero-grid">
+    <div>
+      <div class="eyebrow">Weekly diagnostics + AI mentoring</div>
+      <h1>Know your child's learning curve before the report card does.</h1>
+      <p class="hero-sub">LearnCurve tests what your child is actually learning every week, maps it chapter by chapter, and gives you a plain-language read on where they're growing — and where they're stuck.</p>
+      <div class="hero-actions">
+        <a href="login.html" class="btn btn-primary">Start a free diagnostic</a>
+        <a href="#schools" class="btn btn-ghost">For schools</a>
+      </div>
+      <div class="hero-note" style="margin-top:18px;">No credit card needed · 12 questions · results in 15 minutes</div>
+    </div>
+    <div class="hero-visual">
+      <div class="curve-callout">+18% this term</div>
+      <div class="curve-card">
+        <div class="curve-card-top">
+          <div class="curve-card-name">Aarav's curve</div>
+          <div class="curve-card-tag">Class 7 · Mathematics</div>
+        </div>
+        <div class="curve-svg-wrap">
+          <svg viewBox="0 0 320 150" width="100%" height="150">
+            <line x1="0" y1="30" x2="320" y2="30" stroke="rgba(255,255,255,.08)"/>
+            <line x1="0" y1="75" x2="320" y2="75" stroke="rgba(255,255,255,.08)"/>
+            <line x1="0" y1="120" x2="320" y2="120" stroke="rgba(255,255,255,.08)"/>
+            <path class="curve-path" d="M4 118 C 50 112, 70 100, 96 96 C 130 90, 150 60, 190 55 C 230 50, 250 30, 312 18"
+              fill="none" stroke="#E3A23D" stroke-width="3" stroke-linecap="round"/>
+            <circle cx="312" cy="18" r="5" fill="#E3A23D"/>
+            <circle cx="190" cy="55" r="3.5" fill="#EDE3CE" opacity=".8"/>
+            <circle cx="96" cy="96" r="3.5" fill="#EDE3CE" opacity=".8"/>
+          </svg>
+        </div>
+        <div class="curve-legend">
+          <span><span class="legend-dot" style="background:#E3A23D;"></span>Mastery trend</span>
+          <span><span class="legend-dot" style="background:#7C9C8B;"></span>Weekly test</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="container" id="problem">
+  <div class="section-head">
+    <div class="eyebrow">The problem</div>
+    <h2>Report cards tell you what already happened. Nothing tells you what's happening now.</h2>
+  </div>
+  <div class="problem-row">
+    <div class="problem-card">
+      <svg class="problem-icon" viewBox="0 0 40 40" fill="none"><rect x="6" y="8" width="28" height="24" rx="3" stroke="#1E3A34" stroke-width="2"/><path d="M12 16h16M12 22h10" stroke="#BD5B3F" stroke-width="2" stroke-linecap="round"/></svg>
+      <h3>Exam-time signals only</h3>
+      <p>Two or three checkpoints a year means a gap can sit undetected for a full term before anyone notices.</p>
+    </div>
+    <div class="problem-card">
+      <svg class="problem-icon" viewBox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="14" stroke="#1E3A34" stroke-width="2"/><path d="M20 12v9l6 3" stroke="#BD5B3F" stroke-width="2" stroke-linecap="round"/></svg>
+      <h3>Marks hide the "why"</h3>
+      <p>A 62% doesn't say whether the trouble is fractions, careless mistakes, or reading the question wrong.</p>
+    </div>
+    <div class="problem-card">
+      <svg class="problem-icon" viewBox="0 0 40 40" fill="none"><path d="M6 32 L16 20 L22 25 L34 10" stroke="#1E3A34" stroke-width="2" fill="none" stroke-linecap="round"/><circle cx="34" cy="10" r="3" fill="#BD5B3F"/></svg>
+      <h3>No continuous view for schools</h3>
+      <p>Teachers manage 30+ students with nothing between exams to flag who's quietly falling behind.</p>
+    </div>
+  </div>
+</section>
+
+<section class="how" id="how">
+  <div class="container">
+    <div class="section-head">
+      <div class="eyebrow">How it works</div>
+      <h2>Four steps, running quietly in the background all year.</h2>
+    </div>
+    <div class="how-list">
+      <div class="how-rule"></div>
+      <div class="how-item"><div class="how-num">01</div><h4>Weekly adaptive test</h4><p>Short, low-stress diagnostics that adjust in real time — never another mock exam.</p></div>
+      <div class="how-item"><div class="how-num">02</div><h4>Topic-wise breakdown</h4><p>Every answer maps to a chapter and a skill, not just a raw score.</p></div>
+      <div class="how-item"><div class="how-num">03</div><h4>Learning curve</h4><p>One screen shows growth — or stalling — plotted across the whole year.</p></div>
+      <div class="how-item"><div class="how-num">04</div><h4>AI mentor</h4><p>Explains the pattern in plain language and recommends what to practice next.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="container" id="schools">
+  <div class="section-head">
+    <div class="eyebrow">Who it's for</div>
+    <h2>Built for parents first. Ready for schools when you are.</h2>
+  </div>
+  <div class="audience">
+    <div class="aud-card aud-parent">
+      <div class="kicker">For parents</div>
+      <h3>Reassurance, not surprises</h3>
+      <p>See exactly where your child stands, in language that doesn't require a teaching degree to understand — updated every week, not every term.</p>
+      <a href="login.html" class="btn btn-amber btn-sm">Try the diagnostic</a>
+    </div>
+    <div class="aud-card aud-school">
+      <div class="kicker">For schools</div>
+      <h3>A continuous layer between exams</h3>
+      <p>Class-wide diagnostic data, early warning on students falling behind, and reporting your teachers don't have to build by hand.</p>
+      <a href="admin.html" class="btn btn-ghost btn-sm">See the admin view</a>
+    </div>
+  </div>
+</section>
+
+<section class="container">
+  <div class="cta-band">
+    <h2>Every child deserves a mentor watching their curve.</h2>
+    <div class="cta-form">
+      <input type="email" placeholder="Parent's email address" />
+      <button class="btn btn-amber">Get started</button>
+    </div>
+  </div>
+</section>
+
+<footer class="container">
+  <span>© 2026 LearnCurve</span>
+  <span>Privacy · Terms · Contact</span>
+</footer>
+
+</body>
+</html>

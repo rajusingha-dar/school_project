@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Log in — LearnCurve</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    :root{
+      --forest-deep:#142722;
+      --forest:#1E3A34;
+      --sage:#6B8F7F;
+      --sage-tint:#DFE9E2;
+      --sage-tint-2:#EEF3EF;
+      --paper:#FAFAF8;
+      --amber:#E3A23D;
+      --rust:#BD5B3F;
+      --ink:#16231F;
+      --ink-soft:#4B5B54;
+      --white:#FFFFFF;
+      --line:#D8E2DB;
+      --radius-s:6px;
+      --radius-m:10px;
+      --radius-l:18px;
+      --shadow:0 1px 2px rgba(20,39,34,.06), 0 8px 24px rgba(20,39,34,.06);
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;}
+    body{
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+      color:var(--ink);
+      background:var(--paper);
+      -webkit-font-smoothing:antialiased;
+      line-height:1.5;
+    }
+    h1,h2,h3,h4{
+      font-family:'Fraunces',Georgia,serif;
+      font-weight:560;
+      color:var(--forest-deep);
+      margin:0;
+      letter-spacing:-0.01em;
+    }
+    p{margin:0;}
+    a{color:inherit;text-decoration:none;}
+    ul{list-style:none;margin:0;padding:0;}
+    button{font-family:inherit;cursor:pointer;}
+    img,svg{display:block;max-width:100%;}
+    ::selection{background:var(--amber);color:var(--forest-deep);}
+
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:13px 24px;border-radius:999px;border:1px solid transparent;
+      font-size:15px;font-weight:600;transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .btn:active{transform:scale(.98);}
+    .btn-primary{background:var(--forest-deep);color:var(--white);}
+    .btn-primary:hover{box-shadow:0 6px 18px rgba(20,39,34,.25);}
+    .btn-ghost{background:transparent;color:var(--forest-deep);border-color:var(--line);}
+    .btn-ghost:hover{border-color:var(--forest);}
+    .btn-amber{background:var(--amber);color:var(--forest-deep);}
+    .btn-amber:hover{box-shadow:0 6px 18px rgba(227,162,61,.35);}
+    .btn-sm{padding:9px 16px;font-size:13.5px;}
+    .btn-block{width:100%;}
+
+    .tag{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:4px 11px;border-radius:999px;font-size:12.5px;font-weight:600;
+    }
+    .tag-strong{background:#E2F0E7;color:#2B6B4A;}
+    .tag-watch{background:#FBEFDD;color:#95661F;}
+    .tag-weak{background:#F6E4DE;color:#963F26;}
+
+    .card{
+      background:var(--white);border-radius:var(--radius-l);
+      border:1px solid var(--line);box-shadow:var(--shadow);
+    }
+
+    .container{max-width:1180px;margin:0 auto;padding:0 32px;}
+
+    ::-webkit-scrollbar{width:10px;height:10px;}
+    ::-webkit-scrollbar-thumb{background:var(--sage-tint);border-radius:8px;}
+
+    :focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+
+    @media (prefers-reduced-motion: reduce){
+      *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+    }
+
+</style>
+</head>
+<body>
+<style>
+  .auth-wrap{display:grid;grid-template-columns:1fr 1fr;min-height:100vh;}
+  .auth-side{background:var(--forest-deep);color:var(--white);padding:52px;display:flex;flex-direction:column;justify-content:space-between;position:relative;overflow:hidden;}
+  .auth-brand{display:flex;align-items:center;gap:10px;font-family:'Fraunces',serif;font-weight:600;font-size:19px;position:relative;z-index:1;}
+  .auth-quote{max-width:26ch;position:relative;z-index:1;}
+  .auth-quote h2{color:var(--white);font-size:28px;line-height:1.35;font-weight:560;}
+  .auth-quote p{margin-top:16px;font-size:14px;color:#B9D2C4;}
+  .auth-bg-curve{position:absolute;inset:0;opacity:.35;}
+
+  .auth-form-side{display:flex;align-items:center;justify-content:center;padding:52px;}
+  .auth-form{width:100%;max-width:380px;}
+  .auth-form h1{font-size:28px;margin-bottom:8px;}
+  .auth-sub{color:var(--ink-soft);font-size:14.5px;margin-bottom:32px;}
+
+  .role-switch{display:flex;background:var(--sage-tint-2);border-radius:12px;padding:4px;margin-bottom:28px;}
+  .role-switch button{flex:1;padding:10px;border:none;background:transparent;border-radius:9px;font-size:13.5px;font-weight:600;color:var(--ink-soft);}
+  .role-switch button.active{background:var(--white);color:var(--forest-deep);box-shadow:0 1px 3px rgba(20,39,34,.12);}
+
+  .field{margin-bottom:18px;}
+  .field label{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin-bottom:7px;}
+  .field input{width:100%;padding:12px 14px;border-radius:var(--radius-s);border:1px solid var(--line);font-size:14.5px;background:var(--white);}
+  .field input:focus{border-color:var(--sage);}
+  .field-row{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;}
+  .field-row a{font-size:13px;color:var(--forest);font-weight:600;}
+  .remember{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--ink-soft);}
+
+  .divider{display:flex;align-items:center;gap:14px;margin:26px 0;color:var(--ink-soft);font-size:12.5px;}
+  .divider::before,.divider::after{content:"";flex:1;height:1px;background:var(--line);}
+
+  .otp-note{margin-top:22px;font-size:13px;color:var(--ink-soft);text-align:center;}
+  .switch-account{margin-top:30px;text-align:center;font-size:14px;color:var(--ink-soft);}
+  .switch-account a{color:var(--forest-deep);font-weight:700;}
+
+  @media(max-width:860px){
+    .auth-wrap{grid-template-columns:1fr;}
+    .auth-side{display:none;}
+  }
+</style>
+
+<div class="auth-wrap">
+  <div class="auth-side">
+    <svg class="auth-bg-curve" viewBox="0 0 500 800" preserveAspectRatio="none">
+      <path d="M-20 700 C 80 650, 140 600, 200 560 C 280 505, 320 420, 400 360 C 460 315, 480 260, 520 180"
+        fill="none" stroke="#3E6155" stroke-width="60" stroke-linecap="round"/>
+    </svg>
+    <div class="auth-brand">
+      <svg width="30" height="30" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="9" fill="#E3A23D"/><path d="M8 21 L13 14 L18 18 L24 9" stroke="#142722" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      LearnCurve
+    </div>
+    <div class="auth-quote">
+      <h2>"Every child has a mentor watching their learning curve, all year."</h2>
+      <p>Weekly diagnostics · topic-wise breakdowns · AI-guided next steps</p>
+    </div>
+    <div></div>
+  </div>
+
+  <div class="auth-form-side">
+    <div class="auth-form">
+      <h1>Welcome back</h1>
+      <p class="auth-sub">Log in to see the latest learning curve.</p>
+
+      <div class="role-switch">
+        <button class="active" type="button">Parent</button>
+        <button type="button">Teacher / Admin</button>
+      </div>
+
+      <div class="field">
+        <label>Mobile number or email</label>
+        <input type="text" placeholder="98765 43210 or you@email.com" />
+      </div>
+      <div class="field">
+        <label>Password</label>
+        <input type="password" placeholder="••••••••••" />
+      </div>
+      <div class="field-row">
+        <span class="remember"><input type="checkbox" id="rem"/><label for="rem" style="margin:0;font-weight:400;color:var(--ink-soft);">Remember this device</label></span>
+        <a href="#">Forgot password?</a>
+      </div>
+
+      <button class="btn btn-primary btn-block">Log in</button>
+
+      <div class="divider">or</div>
+
+      <button class="btn btn-ghost btn-block">Send OTP instead</button>
+
+      <p class="switch-account">New to LearnCurve? <a href="index.html">Start a free diagnostic</a></p>
+    </div>
+  </div>
+</div>
+
+</body>
+</html>

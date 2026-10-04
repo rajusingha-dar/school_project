@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dashboard — LearnCurve</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+    :root{
+      --forest-deep:#142722;
+      --forest:#1E3A34;
+      --sage:#6B8F7F;
+      --sage-tint:#DFE9E2;
+      --sage-tint-2:#EEF3EF;
+      --paper:#FAFAF8;
+      --amber:#E3A23D;
+      --rust:#BD5B3F;
+      --ink:#16231F;
+      --ink-soft:#4B5B54;
+      --white:#FFFFFF;
+      --line:#D8E2DB;
+      --radius-s:6px;
+      --radius-m:10px;
+      --radius-l:18px;
+      --shadow:0 1px 2px rgba(20,39,34,.06), 0 8px 24px rgba(20,39,34,.06);
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;}
+    body{
+      font-family:'Inter',-apple-system,BlinkMacSystemFont,sans-serif;
+      color:var(--ink);
+      background:var(--paper);
+      -webkit-font-smoothing:antialiased;
+      line-height:1.5;
+    }
+    h1,h2,h3,h4{
+      font-family:'Fraunces',Georgia,serif;
+      font-weight:560;
+      color:var(--forest-deep);
+      margin:0;
+      letter-spacing:-0.01em;
+    }
+    p{margin:0;}
+    a{color:inherit;text-decoration:none;}
+    ul{list-style:none;margin:0;padding:0;}
+    button{font-family:inherit;cursor:pointer;}
+    img,svg{display:block;max-width:100%;}
+    ::selection{background:var(--amber);color:var(--forest-deep);}
+
+    .btn{
+      display:inline-flex;align-items:center;justify-content:center;gap:8px;
+      padding:13px 24px;border-radius:999px;border:1px solid transparent;
+      font-size:15px;font-weight:600;transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .btn:active{transform:scale(.98);}
+    .btn-primary{background:var(--forest-deep);color:var(--white);}
+    .btn-primary:hover{box-shadow:0 6px 18px rgba(20,39,34,.25);}
+    .btn-ghost{background:transparent;color:var(--forest-deep);border-color:var(--line);}
+    .btn-ghost:hover{border-color:var(--forest);}
+    .btn-amber{background:var(--amber);color:var(--forest-deep);}
+    .btn-amber:hover{box-shadow:0 6px 18px rgba(227,162,61,.35);}
+    .btn-sm{padding:9px 16px;font-size:13.5px;}
+    .btn-block{width:100%;}
+
+    .tag{
+      display:inline-flex;align-items:center;gap:6px;
+      padding:4px 11px;border-radius:999px;font-size:12.5px;font-weight:600;
+    }
+    .tag-strong{background:#E2F0E7;color:#2B6B4A;}
+    .tag-watch{background:#FBEFDD;color:#95661F;}
+    .tag-weak{background:#F6E4DE;color:#963F26;}
+
+    .card{
+      background:var(--white);border-radius:var(--radius-l);
+      border:1px solid var(--line);box-shadow:var(--shadow);
+    }
+
+    .container{max-width:1180px;margin:0 auto;padding:0 32px;}
+
+    ::-webkit-scrollbar{width:10px;height:10px;}
+    ::-webkit-scrollbar-thumb{background:var(--sage-tint);border-radius:8px;}
+
+    :focus-visible{outline:2px solid var(--amber);outline-offset:2px;}
+
+    @media (prefers-reduced-motion: reduce){
+      *{animation-duration:0.001ms !important; transition-duration:0.001ms !important;}
+    }
+
+</style>
+</head>
+<body>
+<style>
+  .app{display:grid;grid-template-columns:248px 1fr;min-height:100vh;}
+  .sidebar{background:var(--forest-deep);color:#CFE2D7;padding:26px 20px;display:flex;flex-direction:column;}
+  .sidebar .brand{color:var(--white);font-family:'Fraunces',serif;font-size:18px;font-weight:600;display:flex;align-items:center;gap:9px;margin-bottom:38px;padding:0 6px;}
+  .side-nav{display:flex;flex-direction:column;gap:2px;flex:1;}
+  .side-link{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:10px;font-size:14px;font-weight:500;color:#B9D2C4;}
+  .side-link svg{width:18px;height:18px;flex:none;}
+  .side-link.active{background:rgba(255,255,255,.08);color:var(--white);}
+  .side-link:hover{color:var(--white);}
+  .side-foot{padding-top:20px;border-top:1px solid rgba(255,255,255,.1);display:flex;align-items:center;gap:10px;}
+  .avatar{width:34px;height:34px;border-radius:50%;background:var(--amber);color:var(--forest-deep);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:none;}
+  .side-foot-text{font-size:13px;line-height:1.3;}
+  .side-foot-text b{color:var(--white);display:block;font-size:13.5px;}
+
+  .main{padding:36px 40px 60px;}
+  .top-row{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:30px;}
+  .greeting{font-size:26px;}
+  .greeting-sub{color:var(--ink-soft);font-size:14.5px;margin-top:6px;}
+  .child-switcher{display:flex;align-items:center;gap:10px;background:var(--white);border:1px solid var(--line);padding:8px 14px 8px 8px;border-radius:999px;font-size:13.5px;font-weight:600;}
+  .child-switcher .avatar{width:28px;height:28px;font-size:11px;background:var(--sage-tint);color:var(--forest);}
+
+  .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:28px;}
+  .stat-card{padding:20px 22px;}
+  .stat-label{font-size:12.5px;color:var(--ink-soft);font-weight:600;margin-bottom:10px;}
+  .stat-value{font-family:'Fraunces',serif;font-size:26px;color:var(--forest-deep);}
+  .stat-delta{font-size:12.5px;font-weight:600;margin-top:6px;}
+  .up{color:#2B6B4A;}
+  .down{color:#963F26;}
+
+  .grid-2{display:grid;grid-template-columns:1.55fr 1fr;gap:20px;align-items:start;}
+
+  .curve-panel{padding:28px 30px 22px;}
+  .curve-panel-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;}
+  .curve-panel-top h3{font-size:18px;}
+  .subject-tabs{display:flex;gap:6px;background:var(--sage-tint-2);padding:4px;border-radius:10px;}
+  .subject-tabs button{border:none;background:transparent;padding:7px 14px;border-radius:8px;font-size:12.5px;font-weight:600;color:var(--ink-soft);}
+  .subject-tabs button.active{background:var(--white);color:var(--forest-deep);}
+  .curve-caption{font-size:13px;color:var(--ink-soft);margin-bottom:10px;}
+
+  .mentor-panel{background:var(--forest-deep);color:var(--white);padding:26px 26px 24px;}
+  .mentor-head{display:flex;align-items:center;gap:10px;margin-bottom:16px;}
+  .mentor-badge{width:34px;height:34px;border-radius:50%;background:var(--amber);display:flex;align-items:center;justify-content:center;flex:none;}
+  .mentor-head span{font-size:13px;color:#9FC2AE;font-weight:600;}
+  .mentor-panel p{font-size:14.5px;line-height:1.65;color:#DCEAE1;}
+  .mentor-action{margin-top:20px;display:flex;align-items:center;justify-content:space-between;background:rgba(255,255,255,.07);padding:14px 16px;border-radius:12px;}
+  .mentor-action span{font-size:13.5px;font-weight:600;}
+
+  .topics-section{margin-top:22px;}
+  .topics-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px;}
+  .topics-head h3{font-size:18px;}
+  .topic-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+  .topic-chip{padding:16px 16px;border-radius:var(--radius-m);border:1px solid var(--line);background:var(--white);}
+  .topic-chip h5{font-size:14px;margin:8px 0 4px;color:var(--ink);font-weight:600;}
+  .topic-chip .sub{font-size:12px;color:var(--ink-soft);}
+
+  .table-section{margin-top:28px;padding:24px 26px;}
+  .table-section h3{font-size:18px;margin-bottom:16px;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  th{text-align:left;font-size:12px;color:var(--ink-soft);font-weight:600;padding:0 8px 12px;border-bottom:1px solid var(--line);}
+  td{padding:14px 8px;border-bottom:1px solid var(--sage-tint-2);}
+  tr:last-child td{border-bottom:none;}
+
+  @media(max-width:1080px){
+    .stat-row{grid-template-columns:repeat(2,1fr);}
+    .grid-2{grid-template-columns:1fr;}
+    .topic-grid{grid-template-columns:repeat(2,1fr);}
+  }
+  @media(max-width:760px){
+    .app{grid-template-columns:1fr;}
+    .sidebar{display:none;}
+  }
+</style>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="brand">
+      <svg width="26" height="26" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="9" fill="#E3A23D"/><path d="M8 21 L13 14 L18 18 L24 9" stroke="#142722" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round" fill="none"/></svg>
+      LearnCurve
+    </div>
+    <nav class="side-nav">
+      <a class="side-link active" href="dashboard.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 13h6V4H4v9zm0 7h6v-5H4v5zm10 0h6V11h-6v9zm0-16v5h6V4h-6z"/></svg>Dashboard</a>
+      <a class="side-link" href="test.html"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></svg>Take a test</a>
+      <a class="side-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"/><path d="M7 15l4-5 3 3 5-7"/></svg>Learning curve</a>
+      <a class="side-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="10" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>AI mentor</a>
+      <a class="side-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M4 21c0-4 4-6 8-6s8 2 8 6"/></svg>Profile</a>
+    </nav>
+    <div class="side-foot">
+      <div class="avatar">PS</div>
+      <div class="side-foot-text"><b>Priya Sharma</b>Parent account</div>
+    </div>
+  </aside>
+
+  <main class="main">
+    <div class="top-row">
+      <div>
+        <h1 class="greeting">Good morning, Priya</h1>
+        <p class="greeting-sub">Here's how Aarav's Mathematics curve looks this week.</p>
+      </div>
+      <div class="child-switcher">
+        <div class="avatar">A</div>
+        Aarav · Class 7
+      </div>
+    </div>
+
+    <div class="stat-row">
+      <div class="card stat-card">
+        <div class="stat-label">Overall mastery</div>
+        <div class="stat-value">74%</div>
+        <div class="stat-delta up">↑ 18% this term</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">Tests this month</div>
+        <div class="stat-value">4</div>
+        <div class="stat-delta up">On pace</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">Current streak</div>
+        <div class="stat-value">6 wks</div>
+        <div class="stat-delta up">Personal best</div>
+      </div>
+      <div class="card stat-card">
+        <div class="stat-label">Topics to watch</div>
+        <div class="stat-value">2</div>
+        <div class="stat-delta down">Fractions, Geometry</div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <div class="card curve-panel">
+        <div class="curve-panel-top">
+          <h3>Aarav's learning curve</h3>
+          <div class="subject-tabs">
+            <button class="active">Math</button>
+            <button>Science</button>
+            <button>English</button>
+          </div>
+        </div>
+        <p class="curve-caption">Weekly diagnostic mastery, last 10 weeks</p>
+        <svg viewBox="0 0 620 220" width="100%" height="230">
+          <line x1="0" y1="20" x2="620" y2="20" stroke="#EEF3EF"/>
+          <line x1="0" y1="80" x2="620" y2="80" stroke="#EEF3EF"/>
+          <line x1="0" y1="140" x2="620" y2="140" stroke="#EEF3EF"/>
+          <line x1="0" y1="198" x2="620" y2="198" stroke="#D8E2DB"/>
+          <path d="M0 175 C 40 170, 70 178, 100 165 C 140 150, 160 155, 200 130 C 240 108, 260 120, 300 95 C 340 75, 370 90, 410 65 C 450 45, 480 55, 520 35 C 555 20, 580 25, 615 12"
+            fill="none" stroke="#E3A23D" stroke-width="3" stroke-linecap="round"/>
+          <g fill="#E3A23D">
+            <circle cx="0" cy="175" r="4"/><circle cx="100" cy="165" r="4"/><circle cx="200" cy="130" r="4"/>
+            <circle cx="300" cy="95" r="4"/><circle cx="410" cy="65" r="4"/><circle cx="520" cy="35" r="4"/><circle cx="615" cy="12" r="5" stroke="#fff" stroke-width="2"/>
+          </g>
+          <text x="0" y="216" font-size="11" fill="#4B5B54" font-family="Inter">Wk 1</text>
+          <text x="290" y="216" font-size="11" fill="#4B5B54" font-family="Inter">Wk 5</text>
+          <text x="590" y="216" font-size="11" fill="#4B5B54" font-family="Inter">Wk 10</text>
+        </svg>
+      </div>
+
+      <div class="card mentor-panel">
+        <div class="mentor-head">
+          <div class="mentor-badge">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#142722" stroke-width="2.2"><rect x="4" y="9" width="16" height="10" rx="2"/><path d="M9 9V6a3 3 0 016 0v3"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/></svg>
+          </div>
+          <span>AI MENTOR</span>
+        </div>
+        <p>Aarav has improved steadily in Algebra and Ratios, but Fractions and Geometry are pulling the average down — three of his last five misses were on mixed-number subtraction.</p>
+        <div class="mentor-action">
+          <span>Practice: Fractions</span>
+          <a href="test.html" class="btn btn-amber btn-sm">Start</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="topics-section">
+      <div class="topics-head">
+        <h3>Topic-wise standing</h3>
+        <span style="font-size:13px;color:var(--ink-soft);">Mathematics · Class 7</span>
+      </div>
+      <div class="topic-grid">
+        <div class="topic-chip"><span class="tag tag-strong">Strong</span><h5>Algebra basics</h5><span class="sub">92% mastery</span></div>
+        <div class="topic-chip"><span class="tag tag-strong">Strong</span><h5>Ratio & proportion</h5><span class="sub">88% mastery</span></div>
+        <div class="topic-chip"><span class="tag tag-watch">Watch</span><h5>Geometry — angles</h5><span class="sub">61% mastery</span></div>
+        <div class="topic-chip"><span class="tag tag-weak">Weak</span><h5>Fractions</h5><span class="sub">44% mastery</span></div>
+      </div>
+    </div>
+
+    <div class="card table-section">
+      <h3>Recent tests</h3>
+      <table>
+        <thead><tr><th>Date</th><th>Subject</th><th>Topic focus</th><th>Score</th><th>Status</th></tr></thead>
+        <tbody>
+          <tr><td>8 Sep 2026</td><td>Mathematics</td><td>Fractions</td><td>44%</td><td><span class="tag tag-weak">Needs work</span></td></tr>
+          <tr><td>1 Sep 2026</td><td>Mathematics</td><td>Geometry</td><td>61%</td><td><span class="tag tag-watch">Watch</span></td></tr>
+          <tr><td>25 Aug 2026</td><td>Mathematics</td><td>Ratio & proportion</td><td>88%</td><td><span class="tag tag-strong">Strong</span></td></tr>
+          <tr><td>18 Aug 2026</td><td>Mathematics</td><td>Algebra basics</td><td>92%</td><td><span class="tag tag-strong">Strong</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+</body>
+</html>
