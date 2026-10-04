@@ -24,7 +24,16 @@ MySQL listens on host port **3307** (so it won't clash with a local MySQL on 330
 ```bash
 cd backend
 uv sync
-uv run uvicorn app.main:app --reload   # available from Step 2
+uv run alembic upgrade head            # create/update tables
+uv run uvicorn app.main:app --reload   # http://localhost:8000/docs
+uv run pytest                          # tests (use in-memory SQLite, no Docker needed)
+```
+
+Parents sign up through the app. School-admin accounts are created from the CLI (the password is
+prompted, never passed as an argument):
+
+```bash
+uv run python -m app.scripts.create_admin --email EMAIL --name NAME --school SCHOOL
 ```
 
 ### 3. Frontend
@@ -32,8 +41,11 @@ uv run uvicorn app.main:app --reload   # available from Step 2
 ```bash
 cd frontend
 pnpm install
-pnpm dev                               # http://localhost:5173
+pnpm dev                               # http://localhost:5173 (proxies /api to :8000)
+pnpm test && pnpm lint
 ```
+
+Open http://localhost:5173 — it redirects to the login page, where parents can register.
 
 ## Layout
 
