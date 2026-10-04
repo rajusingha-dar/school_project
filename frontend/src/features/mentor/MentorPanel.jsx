@@ -1,3 +1,5 @@
+import { Link } from 'react-router-dom';
+
 /** AI mentor commentary plus one recommended next action. */
 export function MentorPanel({ mentor }) {
   return (
@@ -23,10 +25,9 @@ export function MentorPanel({ mentor }) {
       <p>{mentor.summary}</p>
       <div className="mentor-action">
         <span>{mentor.recommendedAction.label}</span>
-        {/* The test flow arrives in a later step; keep the button visible but inert. */}
-        <button className="btn btn-amber btn-sm" disabled title="Available soon">
+        <Link className="btn btn-amber btn-sm" to="/test">
           Start
-        </button>
+        </Link>
       </div>
     </section>
   );

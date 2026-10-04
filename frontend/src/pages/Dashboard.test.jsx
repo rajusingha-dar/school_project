@@ -64,11 +64,12 @@ describe('Dashboard', () => {
     expect(screen.queryByText('English')).not.toBeInTheDocument();
   });
 
-  it('marks unbuilt sidebar pages as coming soon and keeps the mentor action inert', async () => {
+  it('marks unbuilt sidebar pages as coming soon and links the test entry points', async () => {
     renderDashboard(priya);
     await screen.findByText('Overall mastery');
-    expect(screen.getAllByText('Soon')).toHaveLength(4);
-    expect(screen.getByRole('button', { name: 'Start' })).toBeDisabled();
+    expect(screen.getAllByText('Soon')).toHaveLength(3);
+    expect(screen.getByRole('link', { name: 'Start' })).toHaveAttribute('href', '/test');
+    expect(screen.getByRole('link', { name: 'Take a test' })).toHaveAttribute('href', '/test');
   });
 
   it('logs out from the sidebar', async () => {
@@ -94,7 +95,10 @@ describe('Dashboard', () => {
       await screen.findByRole('heading', { name: 'No tests yet for Kabir' }),
     ).toBeInTheDocument();
     expect(screen.getByText('Kabir · Class 7')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Start first diagnostic' })).toBeDisabled();
+    expect(screen.getByRole('link', { name: 'Start first diagnostic' })).toHaveAttribute(
+      'href',
+      '/test',
+    );
   });
 
   it('lets a parent add a second child and switch between them', async () => {

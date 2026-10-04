@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { USING_SAMPLE_DATA } from '../api/dashboard';
 import { AppShell } from '../components/AppShell';
 import { StatCard } from '../components/StatCard';
@@ -57,9 +58,9 @@ function NoTestsState({ child }) {
         Take the first 12-question Mathematics diagnostic to start {firstName}&rsquo;s learning
         curve. It takes about 15 minutes.
       </p>
-      <button className="btn btn-primary" disabled title="Available soon">
+      <Link className="btn btn-primary" to="/test">
         Start first diagnostic
-      </button>
+      </Link>
     </div>
   );
 }

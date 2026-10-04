@@ -33,7 +33,7 @@ const ICONS = {
 
 const NAV_ITEMS = [
   { key: 'dashboard', label: 'Dashboard', to: '/dashboard' },
-  { key: 'test', label: 'Take a test' },
+  { key: 'test', label: 'Take a test', to: '/test' },
   { key: 'curve', label: 'Learning curve' },
   { key: 'mentor', label: 'AI mentor' },
   { key: 'profile', label: 'Profile' },

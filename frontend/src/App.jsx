@@ -5,6 +5,7 @@ import Admin from './pages/Admin';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import Register from './pages/Register';
+import Test from './pages/Test';
 
 /** Route table. The Landing and Test pages are added in later steps. */
 export default function App() {
@@ -17,6 +18,7 @@ export default function App() {
 
       <Route element={<ProtectedRoute roles={[ROLE_PARENT]} />}>
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/test" element={<Test />} />
       </Route>
       <Route element={<ProtectedRoute roles={[ROLE_SCHOOL_ADMIN]} />}>
         <Route path="/admin" element={<Admin />} />
