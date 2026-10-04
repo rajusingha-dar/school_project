@@ -118,6 +118,7 @@ try {
                 Write-Warning 'Servers did not respond in 60s - check the two new windows for errors.'
             }
         }
+        'seed' { Invoke-Cmd 'uv run python -m app.scripts.seed_dev_users' $Backend 'Seeding failed' }
         'admin' {
             $email = Read-Host 'Admin email'
             $name = Read-Host 'Admin full name'
@@ -149,6 +150,7 @@ LearnCurve dev tasks   (usage: .\dev <task>)
   migrate   Apply database migrations
   backend   Run the API in this window  (http://localhost:8000/docs)
   frontend  Run the web app in this window (http://localhost:5173)
+  seed      Create demo accounts for testing (see docs\TEST_ACCOUNTS.md)
   admin     Create a school-admin account (prompts for details and password)
   test      Run backend and frontend tests
   lint      Run ruff, black --check and eslint

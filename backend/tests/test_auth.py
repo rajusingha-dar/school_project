@@ -167,3 +167,22 @@ async def test_create_school_admin_duplicate_email_raises(
     async with session_factory() as session:
         with pytest.raises(EmailAlreadyRegisteredError):
             await AuthService(session).create_school_admin("a@school.in", "password-2", "B", "S")
+
+
+async def test_seed_demo_accounts_is_idempotent_and_logins_work(
+    client: AsyncClient, session_factory: async_sessionmaker[AsyncSession]
+) -> None:
+    from app.scripts.seed_dev_users import DEMO_ACCOUNTS, seed_demo_accounts
+
+    async with session_factory() as session:
+        first = await seed_demo_accounts(session)
+    async with session_factory() as session:
+        second = await seed_demo_accounts(session)
+    assert len(first) == len(DEMO_ACCOUNTS) and second == []
+    for account in DEMO_ACCOUNTS:
+        response = await client.post(
+            "/api/v1/auth/login", json={"email": account.email, "password": account.password}
+        )
+        assert response.status_code == 200, account.email
+        expected_role = "school_admin" if account.school_name else "parent"
+        assert response.json()["user"]["role"] == expected_role

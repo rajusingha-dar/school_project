@@ -67,18 +67,41 @@ class AuthService:
         Raises:
             EmailAlreadyRegisteredError: If the email is already in use.
         """
-        if await self._users.get_by_email(email) is not None:
-            raise EmailAlreadyRegisteredError(email)
-        password_hash = await hash_password(password)
-        try:
-            user = await self._users.add(email, password_hash, full_name, UserRole.PARENT)
-        except IntegrityError as exc:  # concurrent registration with the same email
-            await self._session.rollback()
-            raise EmailAlreadyRegisteredError(email) from exc
+        user = await self._add_parent(email, password, full_name)
         result = await self._start_session(user)
         await self._session.commit()
         logger.info("Registered parent account user_id=%s", user.id)
         return result
+
+    async def create_parent(self, email: str, password: str, full_name: str) -> User:
+        """Create a parent account without signing it in (used by dev seeding).
+
+        Args:
+            email: Normalised email address.
+            password: Plain-text password (hashed before storage).
+            full_name: Display name.
+
+        Returns:
+            The new parent user.
+
+        Raises:
+            EmailAlreadyRegisteredError: If the email is already in use.
+        """
+        user = await self._add_parent(email, password, full_name)
+        await self._session.commit()
+        logger.info("Created parent account user_id=%s", user.id)
+        return user
+
+    async def _add_parent(self, email: str, password: str, full_name: str) -> User:
+        """Insert a parent user (no commit), mapping duplicate emails to a domain error."""
+        if await self._users.get_by_email(email) is not None:
+            raise EmailAlreadyRegisteredError(email)
+        password_hash = await hash_password(password)
+        try:
+            return await self._users.add(email, password_hash, full_name, UserRole.PARENT)
+        except IntegrityError as exc:  # concurrent registration with the same email
+            await self._session.rollback()
+            raise EmailAlreadyRegisteredError(email) from exc
 
     async def create_school_admin(
         self, email: str, password: str, full_name: str, school_name: str
