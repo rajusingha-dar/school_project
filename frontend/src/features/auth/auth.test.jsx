@@ -43,7 +43,9 @@ describe('auth flows', () => {
     await user.type(screen.getByLabelText('Password'), 'correct-horse');
     await user.click(screen.getByRole('button', { name: 'Log in' }));
 
-    expect(await screen.findByRole('heading', { name: 'Welcome, Priya' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', { name: /^Good (morning|afternoon|evening), Priya$/ }),
+    ).toBeInTheDocument();
     expect(authApi.login).toHaveBeenCalledWith('priya@example.com', 'correct-horse');
   });
 
@@ -90,13 +92,17 @@ describe('auth flows', () => {
   it('restores an existing session on load', async () => {
     authApi.restoreSession.mockResolvedValue(parent);
     renderApp('/login');
-    expect(await screen.findByRole('heading', { name: 'Welcome, Priya' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', { name: /^Good (morning|afternoon|evening), Priya$/ }),
+    ).toBeInTheDocument();
   });
 
   it('blocks a parent from the admin route', async () => {
     authApi.restoreSession.mockResolvedValue(parent);
     renderApp('/admin');
-    expect(await screen.findByRole('heading', { name: 'Welcome, Priya' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', { name: /^Good (morning|afternoon|evening), Priya$/ }),
+    ).toBeInTheDocument();
   });
 
   it('validates the register form before calling the API', async () => {
@@ -122,7 +128,9 @@ describe('auth flows', () => {
     await user.type(screen.getByLabelText('Password'), 'correct-horse');
     await user.click(screen.getByRole('button', { name: 'Create account' }));
 
-    expect(await screen.findByRole('heading', { name: 'Welcome, Priya' })).toBeInTheDocument();
+    expect(
+      await screen.findByRole('heading', { name: /^Good (morning|afternoon|evening), Priya$/ }),
+    ).toBeInTheDocument();
     expect(authApi.register).toHaveBeenCalledWith(
       'Priya Sharma',
       'priya@example.com',
