@@ -35,15 +35,24 @@ def get_engine() -> AsyncEngine:
     return _engine
 
 
+def get_session_factory() -> async_sessionmaker[AsyncSession]:
+    """Return the shared session factory, creating the engine on first use.
+
+    Returns:
+        A factory producing ``AsyncSession`` objects (use as an async context manager).
+    """
+    get_engine()
+    assert _session_factory is not None
+    return _session_factory
+
+
 async def get_session() -> AsyncIterator[AsyncSession]:
     """FastAPI dependency yielding a database session per request.
 
     Yields:
         An ``AsyncSession`` that is closed when the request finishes.
     """
-    get_engine()
-    assert _session_factory is not None
-    async with _session_factory() as session:
+    async with get_session_factory()() as session:
         yield session
 
 

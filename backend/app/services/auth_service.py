@@ -23,6 +23,7 @@ from app.core.security import (
     verify_password,
 )
 from app.models.user import User, UserRole
+from app.repositories.school_repository import SchoolRepository
 from app.repositories.user_repository import RefreshTokenRepository, UserRepository
 
 logger = logging.getLogger(__name__)
@@ -78,6 +79,34 @@ class AuthService:
         await self._session.commit()
         logger.info("Registered parent account user_id=%s", user.id)
         return result
+
+    async def create_school_admin(
+        self, email: str, password: str, full_name: str, school_name: str
+    ) -> User:
+        """Create a school-admin account (and its school if new). Not exposed over HTTP.
+
+        Args:
+            email: Normalised email address.
+            password: Plain-text password (hashed before storage).
+            full_name: Display name.
+            school_name: Name of the school to attach the admin to.
+
+        Returns:
+            The new admin user.
+
+        Raises:
+            EmailAlreadyRegisteredError: If the email is already in use.
+        """
+        if await self._users.get_by_email(email) is not None:
+            raise EmailAlreadyRegisteredError(email)
+        school = await SchoolRepository(self._session).get_or_create(school_name)
+        password_hash = await hash_password(password)
+        user = await self._users.add(
+            email, password_hash, full_name, UserRole.SCHOOL_ADMIN, school_id=school.id
+        )
+        await self._session.commit()
+        logger.info("Created school admin user_id=%s school_id=%s", user.id, school.id)
+        return user
 
     async def login(self, email: str, password: str) -> AuthResult:
         """Authenticate with email and password.

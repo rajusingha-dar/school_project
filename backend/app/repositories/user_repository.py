@@ -43,7 +43,14 @@ class UserRepository:
         result = await self._session.execute(select(User).where(User.email == email))
         return result.scalar_one_or_none()
 
-    async def add(self, email: str, password_hash: str, full_name: str, role: UserRole) -> User:
+    async def add(
+        self,
+        email: str,
+        password_hash: str,
+        full_name: str,
+        role: UserRole,
+        school_id: int | None = None,
+    ) -> User:
         """Insert a new user and flush so the id and unique constraints are checked.
 
         Args:
@@ -51,6 +58,7 @@ class UserRepository:
             password_hash: Argon2 hash of the password.
             full_name: Display name.
             role: The account role.
+            school_id: The school the user belongs to, if any.
 
         Returns:
             The persisted user.
@@ -58,7 +66,13 @@ class UserRepository:
         Raises:
             sqlalchemy.exc.IntegrityError: If the email already exists.
         """
-        user = User(email=email, password_hash=password_hash, full_name=full_name, role=role)
+        user = User(
+            email=email,
+            password_hash=password_hash,
+            full_name=full_name,
+            role=role,
+            school_id=school_id,
+        )
         self._session.add(user)
         await self._session.flush()
         return user

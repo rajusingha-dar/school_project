@@ -1,9 +1,12 @@
+import pytest
 from httpx import AsyncClient
 from sqlalchemy import select
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
+from app.core.exceptions import EmailAlreadyRegisteredError
 from app.core.security import create_access_token, create_refresh_token
 from app.models.user import User, UserRole
+from app.services.auth_service import AuthService
 
 REGISTER = {"email": "Priya@Example.com", "password": "correct-horse", "full_name": "Priya Sharma"}
 
@@ -139,3 +142,28 @@ async def test_logout_revokes_refresh_token(client: AsyncClient) -> None:
 
 async def test_logout_without_session_is_ok(client: AsyncClient) -> None:
     assert (await client.post("/api/v1/auth/logout")).status_code == 204
+
+
+async def test_create_school_admin_can_log_in_and_is_admin(
+    client: AsyncClient, session_factory: async_sessionmaker[AsyncSession]
+) -> None:
+    async with session_factory() as session:
+        admin = await AuthService(session).create_school_admin(
+            "rekha@school.in", "admin-password", "Rekha Menon", "Greenwood Public School"
+        )
+    assert admin.role == UserRole.SCHOOL_ADMIN and admin.school_id is not None
+    response = await client.post(
+        "/api/v1/auth/login", json={"email": "rekha@school.in", "password": "admin-password"}
+    )
+    assert response.status_code == 200
+    assert response.json()["user"]["role"] == "school_admin"
+
+
+async def test_create_school_admin_duplicate_email_raises(
+    session_factory: async_sessionmaker[AsyncSession],
+) -> None:
+    async with session_factory() as session:
+        await AuthService(session).create_school_admin("a@school.in", "password-1", "A", "S")
+    async with session_factory() as session:
+        with pytest.raises(EmailAlreadyRegisteredError):
+            await AuthService(session).create_school_admin("a@school.in", "password-2", "B", "S")
