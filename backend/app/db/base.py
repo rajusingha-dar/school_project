@@ -1,7 +1,10 @@
 """Declarative base shared by all SQLAlchemy models."""
 
-from sqlalchemy import MetaData
+from sqlalchemy import BigInteger, Integer, MetaData
 from sqlalchemy.orm import DeclarativeBase
+
+BigIntPK = BigInteger().with_variant(Integer(), "sqlite")
+"""BIGINT primary-key type (plain INTEGER on SQLite so autoincrement works in tests)."""
 
 # Deterministic constraint names keep Alembic migrations portable and diff-friendly.
 NAMING_CONVENTION = {

@@ -31,6 +31,9 @@ class Settings(BaseSettings):
     access_token_expire_minutes: int = 15
     refresh_token_expire_days: int = 7
 
+    refresh_cookie_name: str = "refresh_token"
+    refresh_cookie_path: str = "/api/v1/auth"
+
     cors_origins: str = "http://localhost:5173"
 
     @property
@@ -49,6 +52,15 @@ class Settings(BaseSettings):
             database=self.db_name,
             query={"charset": "utf8mb4"},
         )
+
+    @property
+    def cookie_secure(self) -> bool:
+        """Whether cookies must be HTTPS-only (everything except local development).
+
+        Returns:
+            ``True`` outside the ``development`` environment.
+        """
+        return self.app_env != "development"
 
     @property
     def cors_origin_list(self) -> list[str]:
