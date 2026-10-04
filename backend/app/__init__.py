@@ -1,0 +1,1 @@
+"""LearnCurve backend application."""
