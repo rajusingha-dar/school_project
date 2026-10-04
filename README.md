@@ -8,6 +8,16 @@ Continuous diagnostic and AI-mentoring platform for school students. See [CLAUDE
 - Node.js 20+ and [pnpm](https://pnpm.io/) (`corepack enable` or `npm i -g pnpm`)
 - Docker Desktop
 
+## Quick start (Windows)
+
+```powershell
+.\dev setup     # first time only: creates backend/.env, installs dependencies
+.\dev up        # starts MySQL, migrates, launches API + web, opens the browser
+```
+
+Other tasks: `.\dev admin`, `.\dev test`, `.\dev lint`, `.\dev stop`, `.\dev help`.
+The manual steps below do the same thing.
+
 ## Getting started
 
 ### 1. Database
